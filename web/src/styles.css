@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque/wght.css";
+@import "@fontsource/atkinson-hyperlegible/latin-400.css";
+@import "@fontsource/atkinson-hyperlegible/latin-700.css";
+
+/* Theme: trail-map palette. Light by default, dark via system preference or the toggle. */
+:root {
+  --paper: #eef3ec;
+  --card: #ffffff;
+  --field: #ffffff;
+  --ink: #17261d;
+  --muted: #56665c;
+  --line: #cfdacf;
+  --leaf: #2f6b46;
+  --leaf-dark: #22513a;
+  --leaf-soft: #dcebdf;
+  --on-leaf: #ffffff;
+  --marker: #f2c14e;
+  --amber-soft: #fbf0d4;
+  --amber-ink: #7a5300;
+  --clay-soft: #f7e3dd;
+  --clay-ink: #8c3220;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1a14; --card: #16241c; --field: #1b2c22; --ink: #e7f0e9; --muted: #9fb3a6; --line: #2a3b31;
+    --leaf: #7bc796; --leaf-dark: #a3dcb7; --leaf-soft: #1f3a2a; --on-leaf: #0f1a14; --marker: #f2c14e;
+    --amber-soft: #3a2f12; --amber-ink: #f4d58a; --clay-soft: #3d1f19; --clay-ink: #f3a896;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1a14; --card: #16241c; --field: #1b2c22; --ink: #e7f0e9; --muted: #9fb3a6; --line: #2a3b31;
+  --leaf: #7bc796; --leaf-dark: #a3dcb7; --leaf-soft: #1f3a2a; --on-leaf: #0f1a14; --marker: #f2c14e;
+  --amber-soft: #3a2f12; --amber-ink: #f4d58a; --clay-soft: #3d1f19; --clay-ink: #f3a896;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-field: var(--field);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-leaf: var(--leaf);
+  --color-leaf-dark: var(--leaf-dark);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-on-leaf: var(--on-leaf);
+  --color-marker: var(--marker);
+  --color-amber-soft: var(--amber-soft);
+  --color-amber-ink: var(--amber-ink);
+  --color-clay-soft: var(--clay-soft);
+  --color-clay-ink: var(--clay-ink);
+  --font-sans: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Atkinson Hyperlegible", system-ui, sans-serif;
+}
+
+html { background: var(--paper); color: var(--ink); transition: background-color .25s ease, color .25s ease; }
+body { margin: 0; background: var(--paper); font-family: var(--font-sans); line-height: 1.55; -webkit-text-size-adjust: 100%; }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.015em; line-height: 1.15; }
+:focus-visible { outline: 3px solid var(--marker); outline-offset: 2px; border-radius: 8px; }
+::selection { background: var(--marker); color: #17261d; }
+
+/* Motion that answers an action: steps sliding in, panels appearing, progress filling. */
+@keyframes cg-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes cg-slide-in { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+@keyframes cg-pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.08); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes cg-draw { to { stroke-dashoffset: 0; } }
+@keyframes cg-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes cg-leaf { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 100% { transform: translate(var(--dx), 140px) rotate(var(--rot)); opacity: 0; } }
+.cg-enter { animation: cg-enter .35s ease-out both; }
+.cg-step { animation: cg-slide-in .35s cubic-bezier(.2,.8,.2,1) both; }
+.cg-pop { animation: cg-pop .45s cubic-bezier(.2,.8,.2,1) both; }
+.cg-pulse { animation: cg-pulse 1.4s ease-in-out infinite; }
+.cg-path { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: cg-draw 1.6s cubic-bezier(.45,.05,.2,1) forwards; }
+.cg-leaf { animation: cg-leaf 1.6s ease-in forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .cg-path { stroke-dashoffset: 0; }
+}
+
+@media print {
+  :root, :root[data-theme="dark"] { --paper: #fff; --card: #fff; --ink: #000; --muted: #333; --line: #999; color-scheme: light; }
+  html, body { background: #fff; }
+  .no-print { display: none !important; }
+  .print-card { box-shadow: none !important; border: 1px solid #999 !important; break-inside: avoid; }
+  a { color: #000; }
+  .print-url::after { content: " (" attr(href) ")"; font-size: 0.75em; word-break: break-all; }
+}

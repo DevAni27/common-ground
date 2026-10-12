@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.local-data/
+.env
+.env.*
+!.env.example
+*.log
+# Private exports, capability links and raw test inputs must never be committed.
+exports/
+private/
+eval-results/*.raw.json
+.sync-bundle.tar
